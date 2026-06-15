@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Library</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="heading">
+        Library <button id="show-dialog">Add New Book</button>
+      </div>
+
+      <dialog id="dialog">
+        <form method="dialog">
+          <p>
+            <label for="input-title"
+              >Book Name <input type="text" id="input-title" required
+            /></label>
+          </p>
+          <p>
+            <label for="input-author"
+              >Author Name <input type="text" id="input-author" required
+            /></label>
+          </p>
+          <p>
+            <label
+              >Total Pages <input type="text" id="input-pages" required
+            /></label>
+          </p>
+          <p>
+            <label>
+              <input type="radio" name="read" value="Read" />
+              Read
+            </label>
+
+            <label>
+              <input type="radio" name="read" value="Not Read" />
+              Not Read
+            </label>
+          </p>
+
+          <input type="submit" id="submit-btn" value="Submit" />
+
+          <button type="button" id="close-btn">Cancel</button>
+        </form>
+      </dialog>
+
+      <div id="book-shelf">
+        <div class="book-card">
+          <div class="book-img"></div>
+          <div class="book-title">The Silent Forest</div>
+          <div class="book-author">By Eleanor Hart</div>
+          <div class="book-pages">384 Pages</div>
+          <div class="book-read">Completed</div>
+          <button class="book-delete">×</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
