@@ -63,7 +63,7 @@ const renderBook = function (book) {
   );
   bookTitle.textContent = book.title;
   bookAuthor.textContent = book.author;
-  bookPages.textContent = book.pages;
+  bookPages.textContent = `${book.pages} Pages`;
   bookRead.textContent = book.read;
   bookDelete.textContent = "×";
 
