@@ -9,11 +9,11 @@
   <body>
     <div class="container">
       <div class="heading">
-        Library <button id="show-dialog">Add New Book</button>
+        <h1>Library</h1> <button id="show-dialog">+ Add New Book</button>
       </div>
 
       <dialog id="dialog">
-        <form method="dialog">
+        <form method="dialog" id="book-form">
           <p>
             <label for="input-title"
               >Book Name <input type="text" id="input-title" required
@@ -26,17 +26,17 @@
           </p>
           <p>
             <label
-              >Total Pages <input type="text" id="input-pages" required
+              >Total Pages <input type="number" id="input-pages" required
             /></label>
           </p>
           <p>
             <label>
-              <input type="radio" name="read" value="Read" />
+              <input type="radio" name="read" value="Read" checked />
               Read
             </label>
 
             <label>
-              <input type="radio" name="read" value="Not Read" />
+              <input type="radio" name="read" value="Not Read"  />
               Not Read
             </label>
           </p>
@@ -53,7 +53,7 @@
           <div class="book-title">The Silent Forest</div>
           <div class="book-author">By Eleanor Hart</div>
           <div class="book-pages">384 Pages</div>
-          <div class="book-read">Completed</div>
+          <div class="book-read data-book-status = read">Completed</div>
           <button class="book-delete">×</button>
         </div>
       </div>

@@ -3,14 +3,6 @@ const bookShelf = document.getElementById("book-shelf");
 
 const myLibrary = [];
 
-Book.prototype.readStatus = function (read) {
-  if (read === "Read") {
-    read = "Not Read";
-  } else {
-    read = "Read";
-  }
-};
-
 function Book(title, author, pages, read) {
   if (!new.target) {
     throw Error("You must use the 'new' operator to call the constructor");
@@ -19,22 +11,30 @@ function Book(title, author, pages, read) {
   this.title = title;
   this.author = author;
   this.pages = pages;
-    // this.read = read;
-  this.read = readStatus(read); // Not Defined How ??
+  this.read = read;
   this.id = crypto.randomUUID();
 }
+
+Book.prototype.readStatus = function () {
+  if (this.read === "Read") {
+    this.read = "Not Read";
+  } else {
+    this.read = "Read";
+  }
+};
 
 function addBookToLibrary(title, author, pages, read) {
   const newBook = new Book(title, author, pages, read);
   myLibrary.push(newBook);
   console.log(myLibrary);
 
-  renderBook(title, author, pages, read);
+  renderBook(newBook); // Inserting the whole newBook object as a reference
 }
 
-function renderBook(title, author, pages, read) {
+const renderBook = function (book) {
   const bookCard = document.createElement("div");
   bookCard.classList.add("book-card");
+  bookCard.dataset.bookStatus = book.id;
   const bookImg = document.createElement("div");
   bookImg.classList.add("book-img");
   const bookTitle = document.createElement("div");
@@ -44,7 +44,13 @@ function renderBook(title, author, pages, read) {
   const bookPages = document.createElement("div");
   bookPages.classList.add("book-pages");
   const bookRead = document.createElement("div");
-  bookRead.classList.add("book-read");
+
+  if (book.read === "Read") {
+    bookRead.classList.add("book-read");
+  } else {
+    bookRead.classList.add("book-not-read");
+  }
+
   const bookDelete = document.createElement("button");
   bookShelf.append(bookCard);
   bookCard.append(
@@ -55,54 +61,50 @@ function renderBook(title, author, pages, read) {
     bookRead,
     bookDelete,
   );
-  bookTitle.textContent = title;
-  bookAuthor.textContent = author;
-  bookPages.textContent = pages;
-  bookRead.textContent = read;
+  bookTitle.textContent = book.title;
+  bookAuthor.textContent = book.author;
+  bookPages.textContent = book.pages;
+  bookRead.textContent = book.read;
   bookDelete.textContent = "×";
 
-  // Read Status Toggle
-
-  if (bookRead.textContent === "Read") {
-    bookRead.style.backgroundColor = "#dcfce7";
-    bookRead.style.color = "#15803d";
-  } else {
-    bookRead.style.backgroundColor = "#fef3c7";
-    bookRead.style.color = "#92400e";
-  }
-
-  bookRead.addEventListener("click", () => {
-    Book.readStatus();
+  bookDelete.addEventListener("click", () => {
+    removeBookById(myLibrary, book.id);
+    console.log(myLibrary);
+    bookCard.remove();
   });
 
-  //   bookRead.addEventListener("click", () => {
-  //     if (bookRead.textContent == "Read") {
-  //       bookRead.style.backgroundColor = "#fef3c7";
-  //       bookRead.style.color = "#92400e";
-  //       bookRead.textContent = "Not Read";
-  //     } else {
-  //       bookRead.style.backgroundColor = "#dcfce7";
-  //       bookRead.style.color = "#15803d";
-  //       bookRead.textContent = "Read";
-  //     }
-  //   });
-}
+  bookRead.addEventListener("click", () => {
+    book.readStatus();
+    bookRead.textContent = book.read;
 
-// addBookToLibrary("The Hobbit", "J.R.R. Tolkien", "295 pages", "not read yet");
+    if (book.read === "Read") {
+      bookRead.classList.add("book-read");
+      bookRead.classList.remove("book-not-read");
+    } else {
+      bookRead.classList.add("book-not-read");
+      bookRead.classList.remove("book-read");
+    }
 
-// addBookToLibrary("Atomic Habits", "James Clear", "320 pages", "not read yet");
+    // bookRead.classList.toggle("book-read", book.read === "Read");
+    // bookRead.classList.toggle("book-not-read", book.read === "Not Read");
 
-// addBookToLibrary(
-//   "The Pragmatic Programmer",
-//   "Andrew Hunt",
-//   "352 pages",
-//   "read",
-// );
+    console.log(myLibrary);
+  });
+};
 
-// addBookToLibrary("Clean Code", "Robert C. Martin", "464 pages", "not read yet");
+const removeBookById = (arr, id) => {
+  const index = arr.findIndex((obj) => obj.id === id);
+  if (index !== -1) {
+    arr.splice(index, 1); // remove one object from the index(id)
+  }
+  return arr;
+};
+
+
 
 const showBtn = document.getElementById("show-dialog");
 const dialog = document.getElementById("dialog");
+const form = document.getElementById("book-form");
 const CancelBtn = document.getElementById("close-btn");
 const SubmitBtn = dialog.querySelector("#submit-btn");
 
@@ -122,27 +124,25 @@ SubmitBtn.addEventListener("click", (e) => {
   const pages = document.getElementById("input-pages").value;
   const read = document.querySelector('input[name="read"]:checked').value;
 
+  if (title === "" || author === "" || pages === "" ){
+    return alert ("Oops! Missed Something.")
+  }
+
   addBookToLibrary(title, author, pages, read);
+  form.reset();
   dialog.close();
 });
 
-// myLibrary.forEach(function (book) {
-//   const bookCard = document.createElement("div");
-//   bookCard.classList.add("book-card");
-//   const bookImg = document.createElement("div");
-//   bookImg.classList.add("book-img");
-//   const bookTitle = document.createElement("div");
-//   bookTitle.classList.add("book-title");
-//   const bookAuthor = document.createElement("div");
-//   bookAuthor.classList.add("book-author");
-//   const bookPages = document.createElement("div");
-//   bookPages.classList.add("book-pages");
-//   const bookRead = document.createElement("div");
-//   bookRead.classList.add("book-read");
-//   bookShelf.append(bookCard);
-//   bookCard.append(bookImg, bookTitle, bookAuthor, bookPages, bookRead);
-//   bookTitle.textContent = book.title;
-//   bookAuthor.textContent = book.author;
-//   bookPages.textContent = book.pages;
-//   bookRead.textContent = book.read;
-// });
+
+// addBookToLibrary("The Hobbit", "J.R.R. Tolkien", "295 pages", "not read");
+
+// addBookToLibrary("Atomic Habits", "James Clear", "320 pages", "not read yet");
+
+// addBookToLibrary(
+//   "The Pragmatic Programmer",
+//   "Andrew Hunt",
+//   "352 pages",
+//   "read",
+// );
+
+// addBookToLibrary("Clean Code", "Robert C. Martin", "464 pages", "not read yet");
