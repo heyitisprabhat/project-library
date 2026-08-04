@@ -3,25 +3,25 @@ const bookShelf = document.getElementById("book-shelf");
 
 const myLibrary = [];
 
-function Book(title, author, pages, read) {
-  if (!new.target) {
-    throw Error("You must use the 'new' operator to call the constructor");
+class Book {
+  constructor(title, author, pages, read) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+    this.id = crypto.randomUUID();
   }
 
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
-  this.id = crypto.randomUUID();
-}
-
-Book.prototype.readStatus = function () {
-  if (this.read === "Read") {
+  readStatus(){
+    if (this.read === "Read") {
     this.read = "Not Read";
   } else {
     this.read = "Read";
   }
-};
+  }
+
+}
+
 
 function addBookToLibrary(title, author, pages, read) {
   const newBook = new Book(title, author, pages, read);
@@ -100,8 +100,6 @@ const removeBookById = (arr, id) => {
   return arr;
 };
 
-
-
 const showBtn = document.getElementById("show-dialog");
 const dialog = document.getElementById("dialog");
 const form = document.getElementById("book-form");
@@ -124,15 +122,14 @@ SubmitBtn.addEventListener("click", (e) => {
   const pages = document.getElementById("input-pages").value;
   const read = document.querySelector('input[name="read"]:checked').value;
 
-  if (title === "" || author === "" || pages === "" ){
-    return alert ("Oops! Missed Something.")
+  if (title === "" || author === "" || pages === "") {
+    return alert("Oops! Missed Something.");
   }
 
   addBookToLibrary(title, author, pages, read);
   form.reset();
   dialog.close();
 });
-
 
 // addBookToLibrary("The Hobbit", "J.R.R. Tolkien", "295 pages", "not read");
 
